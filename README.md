@@ -30,7 +30,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented required features:
-![](https://github.com/Llynoirx/veni__vici/blob/main/veni-vici.gif)
+![](https://github.com/Llynoirx/veni-vici/blob/main/veni-vici.gif)
+
 
 <!-- Replace this with whatever GIF tool you used! -->
 GIF created with AwesomeScreenshot and EzGif  
