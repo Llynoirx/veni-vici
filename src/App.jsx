@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import './App.css'
 const API_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
       try{
         const response = await fetch(query);
         const json = await response.json();
-        if (!json.length || json[0].url == null) {
+        if (json[0].url == null) {
           alert("Oops! Something went wrong with that query, let's try again!")
         } else {
           setCatImg(json[0].url);
@@ -24,7 +24,7 @@ const App = () => {
     return (
         <div className="whole-page">
            <h1>Explore the Cat API!</h1>
-            {catImg ? (<img src={catImg} alt="cat"/>):(<div></div>)}
+            {catImg ? (<img className="catImg" src={catImg} alt="cat"/>):(<div></div>)}
             <div>
               <h2>Attributes</h2>
             </div>
