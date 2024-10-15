@@ -4,16 +4,17 @@ const API_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 
 const App = () => {
 
+    const [catImg, setCatImg] = useState(null);
+
     const callAPI = async () => {
-      const query = "https://api.thecatapi.com/v1/images/search?api_key=${API_KEY}"
-      const response = await fetch(query);
-      const json = await response.json();
+      const query = `https://api.thecatapi.com/v1/images/search?api_key=${API_KEY}`
       try{
-        if (json.url == null) {
+        const response = await fetch(query);
+        const json = await response.json();
+        if (!json.length || json[0].url == null) {
           alert("Oops! Something went wrong with that query, let's try again!")
         } else {
-          setCatImg(json.url);
-          setAttributes([]);
+          setCatImg(json[0].url);
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -21,8 +22,13 @@ const App = () => {
     }
 
     return (
-        <div>
-           
+        <div className="whole-page">
+           <h1>Explore the Cat API!</h1>
+            {catImg ? (<img src={catImg} alt="cat"/>):(<div></div>)}
+            <div>
+              <h2>Attributes</h2>
+            </div>
+            <button onClick={callAPI}>Fetch a New Cat!</button>
         </div>
     );
 };
