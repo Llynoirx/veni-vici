@@ -20,6 +20,18 @@ const App = () => {
         intelligence: "",
         hypoallergenic: ""
       });
+    const [bannedAttrs, setBannedAttrs] = useState([]);
+
+
+    const isBanned = (cat) => {
+      return bannedAttrs.includes(cat.name);
+  };
+
+    const addToBanList = (attribute) => {
+      if (!bannedAttrs.includes(attribute)) {
+          setBannedAttrs((prev) => [...prev, attribute]);
+      }
+  };
 
     const callAPI = async () => {
       const query = `https://api.thecatapi.com/v1/images/search?has_breeds=1&api_key=${API_KEY}`
@@ -31,23 +43,25 @@ const App = () => {
         if (json == null) {
           alert("Oops! Something went wrong with that query, let's try again!")
         } else {
-          setCatImg(json[0].url);
-          
           let cat = json[0].breeds[0]
-          setAttr({
-            breed: cat.name || "N/A",
-            temperament: cat.temperament || "N/A",
-            description: cat.description || "N/A",
-            origin: cat.origin || "N/A",
-            life_span: cat.life_span || "N/A",
-            weight: cat.weight || "N/A",
-            affection_level: cat.affection_level || "N/A",
-            dog_friendly: cat.dog_friendly || "N/A",
-            energy_level: cat.energy_level || "N/A",
-            intelligence: cat.intelligence || "N/A",
-            hypoallergenic: cat.hypoallergenic
-          });
-
+          if (isBanned(cat)) {
+            callAPI(); 
+          } else {
+            setCatImg(json[0].url);
+            setAttr({
+              name: cat.name || "N/A",
+              temperament: cat.temperament || "N/A",
+              description: cat.description || "N/A",
+              origin: cat.origin || "N/A",
+              life_span: cat.life_span || "N/A",
+              weight: cat.weight || "N/A",
+              affection_level: cat.affection_level || "N/A",
+              dog_friendly: cat.dog_friendly || "N/A",
+              energy_level: cat.energy_level || "N/A",
+              intelligence: cat.intelligence || "N/A",
+              hypoallergenic: cat.hypoallergenic
+            });
+          }
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -56,25 +70,34 @@ const App = () => {
 
     return (
         <div className="whole-page">
-           <h1>Explore the Cat API!</h1>
+           <h1>Are you looking for a new feline friend but are unsure where to start?</h1>
+            <h3> Use this cat API! If there is any breed you dont think matches with your home, tap on the breed to filter it out.</h3>
             {catImg ? (<img className="catImg" src={catImg} alt="cat"/>):(<div></div>)}
             <div>
               <h2>Attributes</h2>
-              <p>Breed: {attr.breed}</p>
-              <p>Temperament: {attr.temperament}</p>
-              <p>Description: {attr.description}</p>
-              <p>Origin: {attr.origin}</p>
-              <p>Life Span: {attr.life_span}</p>
-              <p>Weight: {attr.weight.imperial}</p>
-              <p>Affection Level: {attr.affection_level}</p>
-              <p>Dog Friendly: {attr.dog_friendly}</p>
-              <p>Energy Level: {attr.energy_level}</p>
-              <p>Intelligence: {attr.intelligence}</p>
-              <p>Hypoallergenic: {attr.hypoallergenic === 1 ? "Yes" : 
-                  attr.hypoallergenic === 0 ? "No" : 
-                  "N/A"}</p>
-            </div>
+              <div className="container" onClick={() => addToBanList(attr.name)}>
+                <strong>Breed:</strong> {attr.name}
+              </div>
+              <p><strong>Temperament:</strong> {attr.temperament}</p>
+              <p><strong>Description:</strong> {attr.description}</p>
+              <p><strong>Origin:</strong> {attr.origin}</p>
+              <p><strong>Life Span:</strong> {attr.life_span}</p>
+              <p><strong>Weight:</strong> {attr.weight.imperial}</p>
+              <p><strong>Affection Level:</strong> {attr.affection_level}</p>
+              <p><strong>Dog Friendly:</strong> {attr.dog_friendly}</p>
+              <p><strong>Energy Level:</strong> {attr.energy_level}</p>
+              <p><strong>Intelligence:</strong> {attr.intelligence}</p>
+              <p><strong>Hypoallergenic:</strong> {attr.hypoallergenic === 1 ? "Yes" : attr.hypoallergenic === 0 ? "No" : "N/A"}</p>
             <button onClick={callAPI}>Fetch a New Cat!</button>
+            <div>
+                <h2>Banned Attributes</h2>
+                <ul>
+                    {bannedAttrs.map((attr, index) => (
+                        <li key={index}>{attr}</li>
+                    ))}
+                </ul>
+            </div>
+        </div>
         </div>
     );
 };
