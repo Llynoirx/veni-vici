@@ -1,24 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'
+
+
 const API_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 
 const App = () => {
 
     const [catImg, setCatImg] = useState(null);
+    const [attr, setAttr] = useState(null);
+
+    // const reset = () => {
+    //   setAttr({
+    //     weight: "",
+    //     name:"",
+    //     temperament: "",
+    //     origin: "",
+    //     description: "",
+    //     life_span: "",
+    //     affection_level: "",
+    //     dog_friendly: "",
+    //     energy_level: "",
+    //     intelligence: "",
+    //     hypoallergenic: ""
+    //   });
+    // }
+
 
     const callAPI = async () => {
-      const query = `https://api.thecatapi.com/v1/images/search?api_key=${API_KEY}`
+      const query = `https://api.thecatapi.com/v1/images/search?has_breeds=1&api_key=${API_KEY}`
       try{
         const response = await fetch(query);
         const json = await response.json();
-        if (json[0].url == null) {
+        console.log("HI");
+        console.log('API response:', json);
+        if (json == null) {
           alert("Oops! Something went wrong with that query, let's try again!")
         } else {
           setCatImg(json[0].url);
+          setAttr(json[0].breeds[0].name);
         }
       } catch (error) {
         console.error('Failed to fetch data:', error);
-    }
+      }
     }
 
     return (
@@ -27,6 +50,7 @@ const App = () => {
             {catImg ? (<img className="catImg" src={catImg} alt="cat"/>):(<div></div>)}
             <div>
               <h2>Attributes</h2>
+              <p>Name: {attr}</p>
             </div>
             <button onClick={callAPI}>Fetch a New Cat!</button>
         </div>
