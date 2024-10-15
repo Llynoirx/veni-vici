@@ -31,7 +31,11 @@ const App = () => {
       if (!bannedAttrs.includes(attribute)) {
           setBannedAttrs((prev) => [...prev, attribute]);
       }
-  };
+    };
+
+    const remFromBanList = (attribute) => {
+      setBannedAttrs((prev) => prev.filter(attr => attr !== attribute));
+    };
 
     const callAPI = async () => {
       const query = `https://api.thecatapi.com/v1/images/search?has_breeds=1&api_key=${API_KEY}`
@@ -73,31 +77,33 @@ const App = () => {
            <h1>Are you looking for a new feline friend but are unsure where to start?</h1>
             <h3> Use this cat API! If there is any breed you dont think matches with your home, tap on the breed to filter it out.</h3>
             {catImg ? (<img className="catImg" src={catImg} alt="cat"/>):(<div></div>)}
-            <div>
-              <h2>Attributes</h2>
-              <div className="container" onClick={() => addToBanList(attr.name)}>
-                <strong>Breed:</strong> {attr.name}
-              </div>
-              <p><strong>Temperament:</strong> {attr.temperament}</p>
-              <p><strong>Description:</strong> {attr.description}</p>
-              <p><strong>Origin:</strong> {attr.origin}</p>
-              <p><strong>Life Span:</strong> {attr.life_span}</p>
-              <p><strong>Weight:</strong> {attr.weight.imperial}</p>
-              <p><strong>Affection Level:</strong> {attr.affection_level}</p>
-              <p><strong>Dog Friendly:</strong> {attr.dog_friendly}</p>
-              <p><strong>Energy Level:</strong> {attr.energy_level}</p>
-              <p><strong>Intelligence:</strong> {attr.intelligence}</p>
-              <p><strong>Hypoallergenic:</strong> {attr.hypoallergenic === 1 ? "Yes" : attr.hypoallergenic === 0 ? "No" : "N/A"}</p>
-            <button onClick={callAPI}>Fetch a New Cat!</button>
-            <div>
+            <div className="attributes-container">
+                <h2>Attributes</h2>
+                <div className="container" onClick={() => addToBanList(attr.name)}>
+                    <strong>Breed:</strong> {attr.name}
+                </div>
+                <p><strong>Temperament:</strong> {attr.temperament}</p>
+                <p><strong>Description:</strong> {attr.description}</p>
+                <p><strong>Origin:</strong> {attr.origin}</p>
+                <p><strong>Life Span:</strong> {attr.life_span}</p>
+                <p><strong>Weight:</strong> {attr.weight.imperial}</p>
+                <p><strong>Affection Level:</strong> {attr.affection_level}</p>
+                <p><strong>Dog Friendly:</strong> {attr.dog_friendly}</p>
+                <p><strong>Energy Level:</strong> {attr.energy_level}</p>
+                <p><strong>Intelligence:</strong> {attr.intelligence}</p>
+                <p><strong>Hypoallergenic:</strong> {attr.hypoallergenic === 1 ? "Yes" : attr.hypoallergenic === 0 ? "No" : "N/A"}</p>
+                <button className="button" onClick={callAPI}>Fetch a New Cat!</button>
+            </div>
+            <div className="banned-attributes">
                 <h2>Banned Attributes</h2>
                 <ul>
                     {bannedAttrs.map((attr, index) => (
-                        <li key={index}>{attr}</li>
+                        <li key={index} onClick={() => remFromBanList(attr)} style={{ cursor: 'pointer', color: 'blue' }}>
+                            {attr}
+                        </li>
                     ))}
                 </ul>
             </div>
-        </div>
         </div>
     );
 };
