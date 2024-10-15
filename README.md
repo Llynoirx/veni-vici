@@ -30,6 +30,8 @@ The following **additional** features are implemented:
 ## Video Walkthrough
 
 Here's a walkthrough of implemented required features:
+
+
 ![](https://github.com/Llynoirx/veni-vici/blob/main/veni-vici.gif)
 
 
